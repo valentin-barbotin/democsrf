@@ -4,10 +4,16 @@ require("functions.php"); // Nos fonctions CSRF (basiques)
 
 $protection = true; // Protection CSRF activée ou pas
 if ($protection) {
-    $check = checkCSRFToken();
-    if (!checkCSRFToken()) { // Si le jeton n'est pas bon, on arrête tout
+    $mode = $_COOKIE;
+
+    $csrf_token = isset($mode['csrf_token']) ? $mode['csrf_token'] : '';
+    
+    if (!checkCSRFToken($csrf_token)) { // Si le jeton n'est pas bon, on arrête tout
         die("CSRF token is invalid");
     }
+
+    $csrftoken = generateCSRFToken(); // A chaque affichage de la page, on génère un nouveau token
+
 }
 
 

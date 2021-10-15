@@ -6,17 +6,11 @@ function generateCSRFToken() {
     $time = time();
     $data = session_id() . $time; // On concatène la session_id et le timestamp
     $hash = hash_hmac('sha256',$data,SECRETKEY) . $time; // On hash le résultat puis on y concatène le même timestamp
-    // setcookie('csrf_token', $hash, 0, '', '', false, true);
+    setcookie('csrf_token', $hash, 0, '', '', false, true);
     return $hash;
 }
 
-function checkCSRFToken() {
-    // if (is_null($_COOKIE['csrf_token'])) {
-    if (!isset($_POST['csrf_token'])) { // Si le token n'existe pas on renvoie false
-        return false;
-    }
-    $csrf_token = $_POST['csrf_token'];
-    
+function checkCSRFToken(String $csrf_token = '') {    
     $timestampToken = substr($csrf_token,-10); // On récupère le timestamp du token à vérifier
     $data = session_id() . $timestampToken; // On concatène la session_id et le timestamp récupéré
     $hash = hash_hmac('sha256',$data,SECRETKEY); // On hash le résultat de la même manière qu'a la génération

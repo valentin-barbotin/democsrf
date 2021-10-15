@@ -2,19 +2,9 @@
 require("header.php");
 require("functions.php");
 
+$csrf_token = '';
 
-// if (isset($_COOKIE['csrf_token'])) {
 
-//     $check = checkCSRFToken();
-//     if ($check) {
-//         $csrftoken = generateCSRFToken();
-//     } else {
-//         setcookie('csrf_token', '', 1, '', '', false, true);
-//         echo "CSRF Token is invalid";
-//     }
-// } else {
-//     $csrftoken = generateCSRFToken();
-// }
 
 $csrftoken = generateCSRFToken(); // A chaque affichage de la page, on génère un nouveau token
 
@@ -22,7 +12,7 @@ if (!empty($_POST)) {
     $login = $_POST['login'];
     $password = $_POST['password'];
 
-    $check = checkCSRFToken(); // On vérifie que le token est valide (dans le formulaire de connection)
+    $check = checkCSRFToken($csrftoken); // On vérifie que le token est valide (dans le formulaire de connection)
     if (!$check) {
         die("CSRF Token is invalid");
     }
